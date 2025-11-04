@@ -1,0 +1,17 @@
+server:
+  host: "0.0.0.0"
+  port: 1883
+
+tls:
+  enabled: false
+  cert_file: "certs/server.crt"
+  key_file: "certs/server.key"
+  ca_file: "certs/ca.crt"
+
+persistence:
+  backend: "bbolt"
+  path: "data/mqtt.db"
+
+logging:
+  level: "info"
+  format: "text"

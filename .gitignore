@@ -1,0 +1,43 @@
+# Binaries
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+mqtt-server
+mqtt-server.exe
+
+# Test binary
+*.test
+
+# Output of the go coverage tool
+*.out
+
+# Dependency directories
+vendor/
+
+# Go workspace file
+go.work
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Application data
+data/
+*.db
+*.log
+
+# Certificates (for local dev - don't commit real certs!)
+*.key
+*.crt
+*.csr
+*.pem
+ca-key.pem

@@ -12,12 +12,15 @@ This MQTT broker is designed for small to medium-scale deployments (hundreds of 
 ### Key Features
 
 - **🔐 Secure by Default**: TLS client certificate authentication (mutual TLS)
-- **💾 Pluggable Persistence**: Interface-based storage abstraction (file-based, Redis, PostgreSQL, RocksDB)
+- **💾 Pluggable Persistence**: Interface-based storage abstraction (bbolt, Redis, PostgreSQL, RocksDB)
 - **📊 Observable**: Prometheus metrics integration
 - **🎛️ QoS Support**: QoS 0, 1, and planned QoS 2 (exactly-once delivery)
 - **🔄 Persistent Sessions**: Client state and offline message queueing
 - **📡 Standard Compliant**: Full MQTT 3.1.1 protocol support
 - **🏗️ Modular Architecture**: Clean interfaces for easy component replacement
+- **🎯 Advanced Wildcards**: Single-level (+) and multi-level (#) topic wildcards
+- **📦 Retained Messages**: Last-value cache for new subscribers
+- **🛠️ Demo Client**: Interactive CLI tool for testing and demonstrations
 
 ### Technology Stack
 
@@ -29,14 +32,25 @@ This MQTT broker is designed for small to medium-scale deployments (hundreds of 
 | Metrics | Prometheus |
 | Deployment | Docker, Native Binary |
 
-## 🚀 Quick Start
+## ⭐ What's New
+
+### Latest Features (v1.1.0)
+
+- **🎯 Enhanced Wildcard Support**: Full implementation of single-level (+) and multi-level (#) topic wildcards with proper level matching
+- **📦 Retained Messages**: Complete lifecycle support - store, deliver to new subscribers, and clear with empty payloads
+- **�️ Demo Client**: Professional interactive CLI tool with auto-reconnect, wildcards, and retained message support
+- **✅ Comprehensive Tests**: 11 integration tests achieving 100% pass rate, including new wildcard and retained message tests
+
+See [ADVANCED_FEATURES.md](ADVANCED_FEATURES.md) for detailed documentation on these features.
+
+## �🚀 Quick Start
 
 ### Prerequisites
 
 Before you begin, ensure you have the following installed:
 
 - **Go 1.21+** - [Download here](https://go.dev/dl/)
-- **OpenSSL** - For TLS certificate generation
+- **OpenSSL** - For TLS certificate generation (optional if TLS disabled)
 - **Git** - For version control
 - **Docker** (optional) - For containerized deployment
 
@@ -187,7 +201,38 @@ Update your `config/config.yaml` to reference the generated certificates:
 
 > Legend: ✅ Implemented | 🚧 Planned/In Progress
 
-## 📚 MQTT Concepts
+## �️ Demo Client
+
+An interactive command-line MQTT client is included for testing and demonstrations:
+
+```bash
+# Build the demo client
+cd tools/client
+go build -o mqtt-client.exe
+
+# Run with default settings (connects to localhost:1883)
+./mqtt-client.exe
+
+# Connect to custom broker
+./mqtt-client.exe -broker tcp://192.168.1.100:1883 -client my-client
+```
+
+**Example Usage:**
+```
+> sub sensors/+/temperature 1
+✅ Subscribed to 'sensors/+/temperature' (QoS 1)
+
+> pub sensors/room1/temperature 22.5 1
+✅ Published to 'sensors/room1/temperature' (QoS 1)
+
+📨 Message received:
+   Topic: sensors/room1/temperature
+   Payload: 22.5
+```
+
+See [tools/client/README.md](tools/client/README.md) for detailed documentation.
+
+## �📚 MQTT Concepts
 
 ### Quality of Service (QoS) Levels
 
@@ -366,12 +411,16 @@ client.publish("test/topic", "Hello from Paho")
 - [x] Basic MQTT protocol support (QoS 0, 1)
 - [x] TLS with client certificate authentication
 - [x] File-based persistence with bbolt
-- [x] Retained messages
+- [x] Retained messages ✨ **NEW**
+- [x] Single-level (+) and multi-level (#) wildcards ✨ **NEW**
+- [x] Interactive demo client ✨ **NEW**
+- [x] Prometheus metrics integration
+- [x] Comprehensive integration tests (11/11 passing)
 - [ ] Complete persistent session implementation
-- [ ] Prometheus metrics integration
 
 ### Phase 2: Enhanced Features
 - [ ] QoS 2 (exactly-once delivery)
+- [ ] Will message support
 - [ ] Redis storage backend
 - [ ] PostgreSQL storage backend
 - [ ] WebSocket transport support

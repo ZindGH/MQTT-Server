@@ -1,17 +1,47 @@
+# MQTT Server Configuration
+# Your chosen settings: localhost only, no TLS, no auth, bbolt storage, QoS 1, metrics enabled
+
 server:
-  host: "0.0.0.0"
-  port: 1883
+  host: "127.0.0.1"              # Localhost only - no external connections
+  port: 1883                      # Standard MQTT port (unencrypted)
+  keep_alive: 60s                 # Client keep-alive timeout
+  write_timeout: 10s              # Write operation timeout
+  read_timeout: 30s               # Read operation timeout
+  clean_session_default: false    # Persist sessions by default (enables message queuing)
 
 tls:
-  enabled: false
+  enabled: false                  # TLS disabled - will add later
   cert_file: "certs/server.crt"
   key_file: "certs/server.key"
   ca_file: "certs/ca.crt"
 
-persistence:
-  backend: "bbolt"
-  path: "data/mqtt.db"
+auth:
+  enabled: false                  # No authentication - development mode
+  allow_anonymous: true           # Allow connections without credentials
+  require_client_certs: false     # No mTLS required
+  username_password_file: ""
+
+storage:
+  backend: "bbolt"                # File-based embedded database
+  path: "./data/mqtt.db"          # Database file location
+
+limits:
+  max_clients: 1000               # Maximum concurrent connections
+  max_message_size: 262144        # 256 KB maximum message size
+  max_inflight_messages: 100      # Max QoS 1/2 messages in flight per client
+  retained_messages: true         # Enable retained message support
+
+qos:
+  max_qos: 1                      # Support QoS 0 and QoS 1 (at least once delivery)
+  retry_interval: 10s             # Retry interval for unacknowledged messages
+  max_retries: 3                  # Maximum retry attempts
 
 logging:
-  level: "info"
-  format: "text"
+  level: "info"                   # Log level: debug, info, warn, error
+  format: "text"                  # Human-readable text format
+  output: "stdout"                # Log to console
+
+metrics:
+  enabled: true                   # Enable Prometheus metrics
+  port: 9090                      # Metrics endpoint port
+  path: "/metrics"                # Metrics endpoint path
